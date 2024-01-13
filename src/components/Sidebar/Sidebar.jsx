@@ -15,12 +15,15 @@ import AddIcon from '@mui/icons-material/Add'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { AlertTitle } from '@mui/material'
 import SideBarOption from './SideBarOption'
-import { addDoc, collection } from 'firebase/firestore'
-import { db } from '../firebase/config'
+import { addDoc, collection, getDocs } from 'firebase/firestore'
+import { auth, db } from '../firebase/config'
 import { useCollection } from 'react-firebase-hooks/firestore'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 function Sidebar(props) {
   const [snapshot, loading, error] = useCollection(collection(db, 'rooms'))
+  const [user] = useAuthState(auth)
+
 
   return (
     <SidebarContainer>
@@ -29,8 +32,7 @@ function Sidebar(props) {
           <h4>HELLO WORLD!</h4>
           <p>
             <FiberManualRecordIcon sx={{ fontSize: '14px', color: 'green' }} />
-            {/* {user.displayName} */}
-            tung nguyen
+            {user.displayName}
           </p>
         </SidebarInfo>
         <CreateIcon sx={{ background: 'white', padding: '5px', borderRadius: '17px' }} />

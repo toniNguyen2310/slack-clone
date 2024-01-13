@@ -4,6 +4,7 @@ import { db } from '../firebase/config'
 import { addDoc, collection, getDocs, doc } from 'firebase/firestore'
 import { useDispatch } from 'react-redux'
 import { enterRoom } from '../../redux/app/appSlice'
+import { useEffect } from 'react'
 
 function SideBarOption({ Icon, title, addChannelOption, id }) {
   const dispatch = useDispatch()
@@ -22,10 +23,13 @@ function SideBarOption({ Icon, title, addChannelOption, id }) {
     if (id) {
       dispatch(
         enterRoom({
-          roomId: id
+          roomId: id,
+          titleChannel: title
         }))
     }
   }
+
+ 
 
 
   return (

@@ -3,15 +3,18 @@ import styled from '@emotion/styled'
 import { IconButton } from '@mui/material'
 import { db } from '../firebase/config'
 import { addDoc, collection, doc, Timestamp } from 'firebase/firestore'
+import { auth } from '../firebase/config'
+import { useAuthState } from 'react-firebase-hooks/auth'
 
 
-function ChatInput({ channelName, channelId }) {
+function ChatInput({ channelName, channelId, chatRef }) {
+  const [user] = useAuthState(auth)
+
   const [input, setInput]= useState('')
 
   //SEND MESSAGE
   const sendMessage = e => {
     e.preventDefault() //Prevents refresh
-    console.log(channelId)
 
     if (!channelId) {
       return false
@@ -20,8 +23,11 @@ function ChatInput({ channelName, channelId }) {
     addDoc(messagesCollection, {
       message: input,
       timestamp: Timestamp.now(),
-      user: 'tung nx',
-      userImage: 'https://www.gstatic.com/mobilesdk/160503_mobilesdk/logo/2x/firebase_28dp.png',
+      user: user.displayName,
+      userImage: user.photoURL
+    })
+    chatRef?.current?.scrollIntoView({
+      behavior: 'smooth'
     })
     setInput('')
   }
@@ -55,6 +61,6 @@ const ChatInputContainer = styled.div`
     outline: none
   }
   > form > button {
-    // display: none !important;
+    display: none !important;
   }
 `

@@ -3,17 +3,33 @@ import StarBorderIcon from '@mui/icons-material/StarBorder'
 import { IconButton } from '@mui/material'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { useSelector } from 'react-redux'
-import { selectRoomId } from '../../redux/app/appSlice'
 import ChatInput from './ChatInput'
+import { collection, doc, orderBy, query, setDoc } from 'firebase/firestore'
+import { db } from '../firebase/config'
+import { useDocument, useCollection } from 'react-firebase-hooks/firestore'
+import Messenge from '../Messenge/Messenge'
+import { useEffect, useRef } from 'react'
 
 function Chat(props) {
-  const roomId = useSelector(selectRoomId)
+  const chatRef = useRef(null)
+  const roomId = useSelector((state) => state.app.roomId)
+  const titleChannel = useSelector((state) => state.app.titleChannel)
+  // const roomId = useSelector(selectRoomId)
+  const docRef = roomId && doc(collection(db, 'rooms'), roomId)
+  const [messages] = useCollection(
+    docRef && query(collection(docRef, 'messages'), orderBy('timestamp'))
+  )
+  useEffect(() => {
+    chatRef?.current?.scrollIntoView({
+      behavior: 'smooth'
+    })
+  }, [messages])
 
   return (
     <ChatContainer>
       <Header>
         <HeaderLeft>
-          <h4><strong>#TITLE</strong></h4>
+          <h4><strong>{titleChannel ? titleChannel : 'CHUA CHON KENH'}</strong></h4>
           <StarBorderIcon />
         </HeaderLeft>
         <HeaderRight>
@@ -23,10 +39,15 @@ function Chat(props) {
           {/* <h4>Details</h4> */}
         </HeaderRight>
       </Header>
-      <ChatMessages>
+      <ChatMessages >
         {/* list out the messagess */}
+        {messages && messages.docs.map((doc) => {
+          const { message, timestamp, user, userImage }=doc.data()
+          return <Messenge key={doc.data().id} message={message} timestamp={timestamp} user={user} userImage={userImage} />
+        })}
+        <ChatBottom ref={chatRef} />
       </ChatMessages>
-      <ChatInput channelId={roomId} />
+      <ChatInput chatRef={chatRef} channelId={roomId} channelName={'dan xu ly'}/>
     </ChatContainer>
   )
 }
@@ -81,4 +102,8 @@ const ChatContainer = styled.div`
 `
 const ChatMessages =styled.div`
 
+`
+const ChatBottom = styled.div`
+background-color: red;
+  padding-bottom: 200px
 `
