@@ -1,4 +1,5 @@
-import React from 'react'
+/* trunk-ignore-all(prettier) */
+import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import CreateIcon from '@mui/icons-material/Create'
@@ -9,27 +10,25 @@ import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import DraftsIcon from '@mui/icons-material/Drafts'
 import GroupIcon from '@mui/icons-material/Group'
 import FileCopyIcon from '@mui/icons-material/FileCopy'
-import TagIcon from '@mui/icons-material/Tag'
 import AppsIcon from '@mui/icons-material/Apps'
 import AddIcon from '@mui/icons-material/Add'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { AlertTitle } from '@mui/material'
 import SideBarOption from './SideBarOption'
-import { addDoc, collection, getDocs } from 'firebase/firestore'
+import { collection } from 'firebase/firestore'
 import { auth, db } from '../firebase/config'
 import { useCollection } from 'react-firebase-hooks/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
+
 
 function Sidebar(props) {
   const [snapshot, loading, error] = useCollection(collection(db, 'rooms'))
   const [user] = useAuthState(auth)
 
-
   return (
     <SidebarContainer>
       <SidebarHeader>
         <SidebarInfo>
-          <h4>HELLO WORLD!</h4>
+          <h4>Blue-Ribblon</h4>
           <p>
             <FiberManualRecordIcon sx={{ fontSize: '14px', color: 'green' }} />
             {user.displayName}
@@ -50,14 +49,6 @@ function Sidebar(props) {
 
       <SidebarOptionList>
         <SideBarOption Icon={KeyboardArrowDownIcon} title={'Channels'} />
-      </SidebarOptionList>
-
-      <SidebarOptionList>
-        <SideBarOption
-          Icon={AddIcon}
-          title={'Add channel'}
-          addChannelOption
-        />
         {snapshot?.docs.map((roomDoc) => (
           <SideBarOption
             key={roomDoc.id}
@@ -66,6 +57,11 @@ function Sidebar(props) {
             title={roomDoc.data().name}
           />
         ))}
+        <SideBarOption
+          Icon={AddIcon}
+          title={'Add channel'}
+          addChannelOption
+        />
       </SidebarOptionList>
     </SidebarContainer>
   )
@@ -78,23 +74,36 @@ const SidebarContainer = styled.div`
       flex: 0.15;
       display: flex;
       flex-direction: column;
+      // height: 100vh;
+      color: white;
       background: var(--slack-color);
-      height: 100%;
-     color: white;
-     background: var(--slack-color);
-     flex: 0.3;
-     border-top: 1px solid #49274b; 
-     max-width: 260px;
-    //  margin-top: 60px;
+      flex: 0.3;
+      max-width: 260px;
+      overflow-y: auto;
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: #d0bcd2; 
+        border-radius: 5px;
+      }
+    
 `
-const SidebarTop = styled.div`
+
+
+const SidebarHeader = styled.div`
   display: flex;
-  padding: 10px;
-  justify-content: space-between;
-  align-items: center;
   border-bottom: 1px solid #49274b;
-  border-top: 1px solid #49274b;
-  & > svg {
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 19px  10px 16px;
+  > .MuiSvgIcon-root{
+    padding: 8px;
+    color: #49274b;
+    font-size: 18px;
+    background-color: white;
+    border-radius: 999px;
     cursor: pointer;
   }
 `
@@ -102,34 +111,27 @@ const SidebarInfo = styled.div`
   display: flex;
   flex-direction: column;
   color: white;
+  gap: 3px;
   & > h4 {
-    font-size: 14px;
+    font-size: 16px;
+    margin-left: 3px;
   }
   & > p {
     display: flex;
     align-items: center;
-    gap: 3px;
-    font-size: 12px;
+    gap: 4px;
+    font-size: 11px;
+    color: #c7bcc7;
   }
 `
+
 const SidebarOptionList = styled.div`
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid #49274b;
-  padding: 10px 0px;
-`
-
-const SidebarHeader = styled.div`
-  display: flex;
-  border-bottom: 1px solid #49274b;
-  padding: 13px;
-  justify-content: space-between;
-
-  > .MuiSvgIcon-root{
-    padding: 8px;
-    color: #49274b;
-    font-size: 18px;
-    background-color: white;
-    border-radius: 999px;
+  & > svg {
+    cursor: pointer;
+    color: #c7bcc7;
   }
 `
+

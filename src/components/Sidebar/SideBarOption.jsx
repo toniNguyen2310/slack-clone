@@ -1,21 +1,31 @@
 
 import styled from '@emotion/styled'
 import { db } from '../firebase/config'
-import { addDoc, collection, getDocs, doc } from 'firebase/firestore'
-import { useDispatch } from 'react-redux'
+import { addDoc, collection } from 'firebase/firestore'
+import { useDispatch, useSelector } from 'react-redux'
 import { enterRoom } from '../../redux/app/appSlice'
 import { useEffect } from 'react'
+import convertToSlug from '../../Utilities/Constant'
+import { useNavigate } from 'react-router-dom'
+import { openModal } from '../../redux/app/modalSlice'
 
 function SideBarOption({ Icon, title, addChannelOption, id }) {
+  const idRedux = useSelector((state) => state.app.roomId)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+
   //ADD CHANNEL
-  const addChannel = async() => {
-    const name = prompt( 'please enter the chanel')
-    if (name) {
-      await addDoc(collection(db, 'rooms'), {
-        name
-      })
-    }
+  const addChannel = () => {
+    // const name = prompt( 'please enter the chanel')
+    dispatch(openModal())
+    return
+    // let nameSlug=convertToSlug(name.trim())
+    // if (nameSlug) {
+    //   await addDoc(collection(db, 'rooms'), {
+    //     name: nameSlug
+    //   })
+    // }
   }
 
   //SELECT CHANNEL
@@ -26,22 +36,21 @@ function SideBarOption({ Icon, title, addChannelOption, id }) {
           roomId: id,
           titleChannel: title
         }))
+      navigate('/chat')
     }
   }
-
- 
 
 
   return (
     <SidebarOptionContainer
       onClick={addChannelOption ? addChannel : selectChannel }
     >
-      {Icon && <Icon fontSize="small" style={{ padding: 10 }}/>}
+      {Icon && <Icon fontSize="small" style={{ padding: 8 }}/>}
       {Icon ? (
-        <h3>{title}</h3>
+        <h4>{title}</h4>
       ) : (
-        <SidebarOptionChannel>
-          <span>#</span>{title}
+        <SidebarOptionChannel style={{ background: idRedux===id ? '#1164a3':'none', color: idRedux===id ? '#ffffff':'#c3b4c6' }}>
+          <span>#</span><p style={{ color: idRedux===id ? '#ffffff':'#c3b4c6' }}>{title}</p>
         </SidebarOptionChannel>
       )}
     </SidebarOptionContainer>
@@ -53,13 +62,14 @@ export default SideBarOption
 
 const SidebarOptionContainer = styled.div`
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 0px 10px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 12px;
+  gap: 2px;
+  font-size: 15px;
+  color: #c7bcc7;
   & > svg {
-    color: white;
+    color: #c7bcc7;
   }
   p {
     font-size: 12px;
@@ -72,9 +82,22 @@ const SidebarOptionContainer = styled.div`
   }
   background: ${(props) => (props.selected ? '#340e36' : 'none')};
 `
-const SidebarOptionChannel = styled.h3`
-  padding: 10px 0;
-  margin-left: 50px;
-  font-weight:300;
+const SidebarOptionChannel = styled.div`
+> span{
+  padding: 2px 5px;  
+  margin-left: 5px;
+  font-size: 20px
+}
+width: 100%;
+gap: 10px;
+display: flex;
+align-items: center;
+justify-content: flex-start;
+border-radius: 10px;
+> p{
+  color: #c7bcc7;
+  font-size: 16px
+}
 
 `
+// background: ${idRedux === id ? 'red': 'none'}

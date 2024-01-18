@@ -13,6 +13,8 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { auth } from './components/firebase/config'
 
 import Loading from './components/Loading/Loading'
+import NewChannel from './components/NewChannel/NewChannel'
+import ModalAdChannels from './components/NewChannel/ModalAdChannels'
 
 const LayoutLogin = () => {
   return (
@@ -43,6 +45,7 @@ function App() {
         element: (
           <>
             <Layout />
+            <ModalAdChannels />
           </>
         ),
         errorElement: <NotFound />,
@@ -51,10 +54,13 @@ function App() {
             index: true,
             element: (
               <>
-                {/* <HomePage /> */}
-                <Chat />
+                <HomePage />
               </>
             )
+          },
+          {
+            path: '/chat',
+            element: <Chat />
           }
         ]
       } :
@@ -87,6 +93,7 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
+      
     </>
   )
 }
@@ -115,3 +122,5 @@ align-items: center;
   
 }
 `
+
+

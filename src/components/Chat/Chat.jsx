@@ -7,14 +7,15 @@ import ChatInput from './ChatInput'
 import { collection, doc, orderBy, query, setDoc } from 'firebase/firestore'
 import { db } from '../firebase/config'
 import { useDocument, useCollection } from 'react-firebase-hooks/firestore'
-import Messenge from '../Messenge/Messenge'
+import Message from '../Message/Message'
 import { useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function Chat(props) {
   const chatRef = useRef(null)
+  const navigate = useNavigate()
   const roomId = useSelector((state) => state.app.roomId)
   const titleChannel = useSelector((state) => state.app.titleChannel)
-  // const roomId = useSelector(selectRoomId)
   const docRef = roomId && doc(collection(db, 'rooms'), roomId)
   const [messages] = useCollection(
     docRef && query(collection(docRef, 'messages'), orderBy('timestamp'))
@@ -24,6 +25,13 @@ function Chat(props) {
       behavior: 'smooth'
     })
   }, [messages])
+
+  useEffect(() => {
+    if (roomId === null) {
+      navigate('/')
+    }
+
+  }, [roomId])
 
   return (
     <ChatContainer>
@@ -43,7 +51,7 @@ function Chat(props) {
         {/* list out the messagess */}
         {messages && messages.docs.map((doc) => {
           const { message, timestamp, user, userImage }=doc.data()
-          return <Messenge key={doc.data().id} message={message} timestamp={timestamp} user={user} userImage={userImage} />
+          return <Message key={doc.data().id} message={message} timestamp={timestamp} user={user} userImage={userImage} />
         })}
         <ChatBottom ref={chatRef} />
       </ChatMessages>
@@ -97,13 +105,32 @@ const HeaderRight = styled.div`
 const ChatContainer = styled.div`
   flex: 0.7;
   flex-grow: 1;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin-top: 60px;
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  /* Track */
+  // ::-webkit-scrollbar-track {
+  //   background: #ffffff1;
+
+  // }
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+    border-radius: 5px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+  }
 `
 const ChatMessages =styled.div`
 
 `
 const ChatBottom = styled.div`
-background-color: red;
+  background-color: red;
   padding-bottom: 200px
 `

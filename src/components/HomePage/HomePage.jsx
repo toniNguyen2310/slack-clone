@@ -1,10 +1,10 @@
-
+import NewChannel from '../NewChannel/NewChannel'
 
 function HomePage(props) {
   return (
-    <div>
-            HOME PAGE
-    </div>
+    <>
+      <NewChannel />
+    </>
   )
 }
 

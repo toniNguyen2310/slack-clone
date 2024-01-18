@@ -1,25 +1,25 @@
 import styled from '@emotion/styled'
 import React from 'react'
 
-function Messenge(props) {
+function Message(props) {
   const { message, timestamp, user, userImage }=props
 
   return (
-    <MessengeContainer>
+    <MessageContainer>
       <img src={userImage} alt="" />
-      <MessegeInfo>
+      <MessageInfo>
         <h4>
           {user} <span>{new Date(timestamp.toDate()).toUTCString()}</span>
         </h4>
         <p>{message}</p>
-      </MessegeInfo>
-    </MessengeContainer>
+      </MessageInfo>
+    </MessageContainer>
   )
 }
 
-export default Messenge
+export default Message
 
-const MessengeContainer =styled.div`
+const MessageContainer =styled.div`
     display: flex;
     align-items: center;
     padding: 20px;
@@ -30,7 +30,7 @@ const MessengeContainer =styled.div`
     }
 
 `
-const MessegeInfo = styled.div`
+const MessageInfo = styled.div`
     padding-left: 10px;
 
     > h4 > span {

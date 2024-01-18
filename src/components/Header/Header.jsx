@@ -7,23 +7,23 @@ import { Avatar } from '@mui/material'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { auth } from '../firebase/config'
 
-function Header(props) {
-  const [user, loading] = useAuthState(auth )
+function Header() {
+  const [user] = useAuthState(auth )
 
   return (
     <HeaderContainer>
       <HeaderLeft>
-        <HeaderAvatar alt={user?.displayName} src={user.photoURL} onClick={()=> auth.signOut()}/>
         <AccessTimeIcon />
       </HeaderLeft>
 
       <HeaderSearch>
-        <SearchIcon />
         <input type="text" placeholder="Search your channel" />
+        <SearchIcon />
       </HeaderSearch>
 
       <HeaderRight>
         <HelpOutlineIcon />
+        <HeaderAvatar alt={user?.displayName} src={user.photoURL} onClick={()=> auth.signOut()}/>
       </HeaderRight>
     </HeaderContainer>
   )
@@ -36,19 +36,19 @@ const HeaderContainer = styled.div`
   align-items: center;
   width: 100%;
   padding: 10px 0px;
-  background: var(--slack-color);
-
+  background: var(--slack-header-color);
 `
 const HeaderLeft = styled.div`
   flex: 0.3;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   & > svg {
     cursor: pointer;
-    color: white;
+    color: #c7bcc7;
     margin-right: 30px;
   }
+
 `
 
 const HeaderSearch = styled.div`
@@ -60,7 +60,8 @@ const HeaderSearch = styled.div`
   background: #421f44;
   & > svg {
     color: gray;
-    margin-left: 60px;
+    // margin-left: 60px;
+    margin-right:10px;
   }
   & > input {
     outline: none;
@@ -76,13 +77,16 @@ const HeaderRight = styled.div`
   flex: 0.3;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   & > svg {
     cursor: pointer;
-    color: white;
-    margin-right: 20px;
+    color: #c7bcc7;
   }
+  // background: blue;
+  margin-right: 10px;
 `
 const HeaderAvatar = styled(Avatar)`
+  border-radius: 20%;
   margin-left: 20px;
   cursor: pointer;
   width: 30px;
