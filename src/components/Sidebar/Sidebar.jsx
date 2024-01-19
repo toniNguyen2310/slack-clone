@@ -1,5 +1,4 @@
 /* trunk-ignore-all(prettier) */
-import React, { useEffect } from 'react'
 import styled from '@emotion/styled'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import CreateIcon from '@mui/icons-material/Create'

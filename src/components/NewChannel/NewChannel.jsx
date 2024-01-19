@@ -3,7 +3,7 @@ import styled from '@emotion/styled'
 import TagIcon from '@mui/icons-material/Tag'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { closeModal, openModal } from '../../redux/app/modalSlice'
+import { closeModal } from '../../redux/app/modalSlice'
 import { addDoc, collection } from 'firebase/firestore'
 import convertToSlug from '../../Utilities/Constant'
 import { db } from '../firebase/config'
@@ -11,13 +11,13 @@ import { message } from 'antd'
 import { enterRoom } from '../../redux/app/appSlice'
 import { useNavigate } from 'react-router-dom'
 
-function NewChannel() {
+function NewChannel(props) {
+  const { setIsLoading } = props
   const inputRef = useRef(null)
   const statusModal = useSelector((state) => state.modal.statusModal)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [titleChannel, setTitleChannel] =useState('')
-  const [isLoading, setIsLoading] = useState(false)
 
   //Enter submit
   const handleKeyPress = (e) => {
@@ -32,9 +32,9 @@ function NewChannel() {
     e.preventDefault()
     setIsLoading(true)
     if (!titleChannel) {
-      message.error('Empty')
+      message.error('Please enter information')
       inputRef.current.focus()
-      setIsLoading(true)
+      setIsLoading(false)
       return
     }
     let nameSlug=convertToSlug(titleChannel.trim())
@@ -61,22 +61,17 @@ function NewChannel() {
 
   return (
     <>
-      {
-        isLoading ? <div>LOADING</div>:<NewChannelContainer>
-          <h1>Create a channel</h1>
-          <p>This could be anything: a project, campaign, event, or the deal you&apos;re trying to close</p>
-          <InputInformation>
-            <TagIcon />
-            <input value={titleChannel} onChange={(e) => setTitleChannel(e.target.value)} onKeyUp={(e) => handleKeyPress(e)} ref={inputRef} type="text" placeholder='social-media, design-team... ' />
-          </InputInformation>
-          <button onClick={(e) => handleAddChannel(e)} id='create-btn'>DONE</button>
-          {statusModal && <button id='cancel-btn' onClick={() => dispatch(closeModal
-          ())}>CANCEL</button>}
-
-        </NewChannelContainer>
-
-      }
-
+      <NewChannelContainer>
+        <h1>Create a channel</h1>
+        <p>This could be anything: a project, campaign, event, or the deal you&apos;re trying to close</p>
+        <InputInformation>
+          <TagIcon />
+          <input value={titleChannel} onChange={(e) => setTitleChannel(e.target.value)} onKeyUp={(e) => handleKeyPress(e)} ref={inputRef} type="text" placeholder='social-media, design-team... ' />
+        </InputInformation>
+        <button onClick={(e) => handleAddChannel(e)} id='create-btn'>DONE</button>
+        {statusModal && <button id='cancel-btn' onClick={() => dispatch(closeModal
+        ())}>CANCEL</button>}
+      </NewChannelContainer>
     </>
 
   )

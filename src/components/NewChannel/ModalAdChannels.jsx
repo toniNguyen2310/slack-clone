@@ -1,10 +1,10 @@
 import styled from '@emotion/styled'
 import NewChannel from './NewChannel'
-import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeModal } from '../../redux/app/modalSlice'
 
 function ModalAdChannels(props) {
+  const { setIsLoading } = props
   const statusModal = useSelector((state) => state.modal.statusModal)
   const dispatch = useDispatch()
   window.onclick = function(event) {
@@ -17,7 +17,7 @@ function ModalAdChannels(props) {
 
   return (
     <Modal id='modal-create' style={{ display : statusModal ? 'block': 'none' }} >
-      <NewChannel />
+      <NewChannel setIsLoading={setIsLoading} />
     </Modal>
   )
 }

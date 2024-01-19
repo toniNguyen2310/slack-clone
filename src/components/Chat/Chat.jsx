@@ -1,6 +1,5 @@
 import styled from '@emotion/styled'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
-import { IconButton } from '@mui/material'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { useSelector } from 'react-redux'
 import ChatInput from './ChatInput'
@@ -51,11 +50,11 @@ function Chat(props) {
         {/* list out the messagess */}
         {messages && messages.docs.map((doc) => {
           const { message, timestamp, user, userImage }=doc.data()
-          return <Message key={doc.data().id} message={message} timestamp={timestamp} user={user} userImage={userImage} />
+          return <Message key={doc.data().timestamp} message={message} timestamp={timestamp} user={user} userImage={userImage} />
         })}
         <ChatBottom ref={chatRef} />
       </ChatMessages>
-      <ChatInput chatRef={chatRef} channelId={roomId} channelName={'dan xu ly'}/>
+      <ChatInput chatRef={chatRef} channelId={roomId} channelName={titleChannel}/>
     </ChatContainer>
   )
 }
@@ -106,7 +105,7 @@ const ChatContainer = styled.div`
   flex: 0.7;
   flex-grow: 1;
   overflow-y: auto;
-  margin-top: 60px;
+  // margin-top: 60px;
   ::-webkit-scrollbar {
     width: 8px;
   }
@@ -131,6 +130,6 @@ const ChatMessages =styled.div`
 
 `
 const ChatBottom = styled.div`
-  background-color: red;
-  padding-bottom: 200px
+  // background-color: red;
+  padding-bottom: 80px
 `

@@ -15,6 +15,7 @@ import { auth } from './components/firebase/config'
 import Loading from './components/Loading/Loading'
 import NewChannel from './components/NewChannel/NewChannel'
 import ModalAdChannels from './components/NewChannel/ModalAdChannels'
+import ModalLoading from './components/Loading/ModalLoading'
 
 const LayoutLogin = () => {
   return (
@@ -26,7 +27,7 @@ const LayoutLogin = () => {
 
 function App() {
   const [user, loading] = useAuthState(auth)
-
+  const [isLoading, setIsLoading] = useState(false)
   if (loading) {
     return (
       <AppLoading>
@@ -45,7 +46,8 @@ function App() {
         element: (
           <>
             <Layout />
-            <ModalAdChannels />
+            <ModalAdChannels setIsLoading={setIsLoading} />
+            <ModalLoading spinning={isLoading} />
           </>
         ),
         errorElement: <NotFound />,
