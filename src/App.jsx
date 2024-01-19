@@ -5,15 +5,12 @@ import { Layout } from './components/Layout/Layout'
 import NotFound from './components/NotFound/NotFound'
 import HomePage from './components/HomePage/HomePage'
 import Login from './components/Login/Login'
-import Header from './components/Header/Header'
 import styled from '@emotion/styled'
 import Chat from './components/Chat/Chat'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { auth } from './components/firebase/config'
 
 import Loading from './components/Loading/Loading'
-import NewChannel from './components/NewChannel/NewChannel'
 import ModalAdChannels from './components/NewChannel/ModalAdChannels'
 import ModalLoading from './components/Loading/ModalLoading'
 
@@ -56,7 +53,7 @@ function App() {
             index: true,
             element: (
               <>
-                <HomePage />
+                <HomePage setIsLoading={setIsLoading} />
               </>
             )
           },
@@ -95,7 +92,6 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
-      
     </>
   )
 }

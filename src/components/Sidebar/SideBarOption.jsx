@@ -1,31 +1,19 @@
 
 import styled from '@emotion/styled'
-import { db } from '../firebase/config'
-import { addDoc, collection } from 'firebase/firestore'
 import { useDispatch, useSelector } from 'react-redux'
 import { enterRoom } from '../../redux/app/appSlice'
-import { useEffect } from 'react'
-import convertToSlug from '../../Utilities/Constant'
 import { useNavigate } from 'react-router-dom'
 import { openModal } from '../../redux/app/modalSlice'
 
-function SideBarOption({ Icon, title, addChannelOption, id }) {
+function SideBarOption({ Icon, title, addChannelOption, id, setShowList, showList }) {
   const idRedux = useSelector((state) => state.app.roomId)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-
   //ADD CHANNEL
   const addChannel = () => {
-    // const name = prompt( 'please enter the chanel')
     dispatch(openModal())
     return
-    // let nameSlug=convertToSlug(name.trim())
-    // if (nameSlug) {
-    //   await addDoc(collection(db, 'rooms'), {
-    //     name: nameSlug
-    //   })
-    // }
   }
 
   //SELECT CHANNEL
@@ -40,10 +28,14 @@ function SideBarOption({ Icon, title, addChannelOption, id }) {
     }
   }
 
+  //HIDE LISTCHANNEL
+  const hideListChannel = () => {
+    setShowList(!showList)
+  }
 
   return (
     <SidebarOptionContainer
-      onClick={addChannelOption ? addChannel : selectChannel }
+      onClick={addChannelOption ? addChannel : title === 'Channels' ? hideListChannel : selectChannel }
     >
       {Icon && <Icon fontSize="small" style={{ padding: 8 }}/>}
       {Icon ? (

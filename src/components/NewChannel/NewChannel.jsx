@@ -30,11 +30,11 @@ function NewChannel(props) {
   //HANDLE ADD NEW CHANNEL
   const handleAddChannel = async(e) => {
     e.preventDefault()
-    setIsLoading(true)
+    // setIsLoading(true)
     if (!titleChannel) {
       message.error('Please enter information')
       inputRef.current.focus()
-      setIsLoading(false)
+      // setIsLoading(false)
       return
     }
     let nameSlug=convertToSlug(titleChannel.trim())

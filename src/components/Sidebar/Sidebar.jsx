@@ -17,17 +17,19 @@ import { collection } from 'firebase/firestore'
 import { auth, db } from '../firebase/config'
 import { useCollection } from 'react-firebase-hooks/firestore'
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { useState } from 'react'
 
 
 function Sidebar(props) {
-  const [snapshot, loading, error] = useCollection(collection(db, 'rooms'))
+  const [snapshot] = useCollection(collection(db, 'rooms'))
   const [user] = useAuthState(auth)
+  const [showList, setShowList] =useState(true)
 
   return (
     <SidebarContainer>
       <SidebarHeader>
         <SidebarInfo>
-          <h4>Blue-Ribblon</h4>
+          <h4>Slack</h4>
           <p>
             <FiberManualRecordIcon sx={{ fontSize: '14px', color: 'green' }} />
             {user.displayName}
@@ -37,17 +39,16 @@ function Sidebar(props) {
       </SidebarHeader>
       <SidebarOptionList>
         <SideBarOption Icon={MessageIcon} title={'Threads'} />
-        <SideBarOption Icon={InboxIcon} title={'Mentions & reactions'} />
         <SideBarOption Icon={DraftsIcon} title={'Saved items'} />
         <SideBarOption Icon={BookmarkBorderIcon} title={'Channel browser'} />
         <SideBarOption Icon={GroupIcon} title={'People & user groups'} />
         <SideBarOption Icon={AppsIcon} title={'Apps'} />
         <SideBarOption Icon={FileCopyIcon} title={'File browser'} />
-        <SideBarOption Icon={KeyboardArrowUpIcon} title={'Show less'} />
+        {/* <SideBarOption Icon={KeyboardArrowUpIcon} title={'Show less'} /> */}
       </SidebarOptionList>
 
-      <SidebarOptionList>
-        <SideBarOption Icon={KeyboardArrowDownIcon} title={'Channels'} />
+      <SideBarOption showList={showList} setShowList={setShowList} Icon={KeyboardArrowDownIcon} title={'Channels'} />
+      <SidebarOptionList style={{ display:showList ? 'block' : 'none' }} >
         {snapshot?.docs.map((roomDoc) => (
           <SideBarOption
             key={roomDoc.id}
@@ -84,7 +85,7 @@ const SidebarContainer = styled.div`
       }
       /* Handle */
       ::-webkit-scrollbar-thumb {
-        background: #d0bcd2; 
+        background: #967996; 
         border-radius: 5px;
       }
     

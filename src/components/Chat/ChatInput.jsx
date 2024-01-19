@@ -41,7 +41,7 @@ function ChatInput({ channelName, channelId, chatRef }) {
 
   useEffect(() => {
     inputFocus.current.focus()
-  }, [])
+  }, [channelName])
 
   return (
     <ChatInputContainer>

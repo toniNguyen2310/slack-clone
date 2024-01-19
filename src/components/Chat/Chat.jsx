@@ -1,14 +1,14 @@
 import styled from '@emotion/styled'
-import StarBorderIcon from '@mui/icons-material/StarBorder'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import { useSelector } from 'react-redux'
 import ChatInput from './ChatInput'
-import { collection, doc, orderBy, query, setDoc } from 'firebase/firestore'
+import { collection, doc, orderBy, query, deleteDoc  } from 'firebase/firestore'
 import { db } from '../firebase/config'
-import { useDocument, useCollection } from 'react-firebase-hooks/firestore'
+import { useCollection } from 'react-firebase-hooks/firestore'
 import Message from '../Message/Message'
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 
 function Chat(props) {
   const chatRef = useRef(null)
@@ -16,6 +16,7 @@ function Chat(props) {
   const roomId = useSelector((state) => state.app.roomId)
   const titleChannel = useSelector((state) => state.app.titleChannel)
   const docRef = roomId && doc(collection(db, 'rooms'), roomId)
+
   const [messages] = useCollection(
     docRef && query(collection(docRef, 'messages'), orderBy('timestamp'))
   )
@@ -29,15 +30,14 @@ function Chat(props) {
     if (roomId === null) {
       navigate('/')
     }
-
   }, [roomId])
 
   return (
     <ChatContainer>
       <Header>
         <HeaderLeft>
-          <h4><strong>{titleChannel ? titleChannel : 'CHUA CHON KENH'}</strong></h4>
-          <StarBorderIcon />
+          <h3><strong>#{titleChannel ? titleChannel : 'CHUA CHON KENH'}</strong></h3>
+          <KeyboardArrowDownIcon />
         </HeaderLeft>
         <HeaderRight>
           <p>
@@ -47,7 +47,7 @@ function Chat(props) {
         </HeaderRight>
       </Header>
       <ChatMessages >
-        {/* list out the messagess */}
+        {/* list out the messages */}
         {messages && messages.docs.map((doc) => {
           const { message, timestamp, user, userImage }=doc.data()
           return <Message key={doc.data().timestamp} message={message} timestamp={timestamp} user={user} userImage={userImage} />
@@ -71,22 +71,21 @@ const ChatInnerContainer = styled.div`
   position: relative;
 `
 const Header = styled.div`
+// background: red;
   display: flex;
   justify-content: space-between;
-  padding: 20px;
+  align-items: center;
+  padding: 15px 20px;
   border-bottom: 1px solid lightgray;
 `
 const HeaderLeft = styled.div`
   display: flex;
   align-items: center;
-  > h4 {
+  > h3 {
     display: flex;
-    text-transform: lowercase;
   }
-
-  > h4 > .MuiSvgIcon-root {
-    margin-left: 10px;
-    font-size: 18px;
+  svg {
+    cursor: pointer
   }
 `
 const HeaderRight = styled.div`
